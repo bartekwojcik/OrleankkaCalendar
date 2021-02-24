@@ -43,8 +43,6 @@ let bindR f result =
 
 
 
-
-
 /// given a function wrapped in a result
 /// and a value wrapped in a result
 /// apply the function to the value only if both are Success
