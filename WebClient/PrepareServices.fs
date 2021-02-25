@@ -13,6 +13,9 @@ module PrepareServices =
         CreateRecurringTask : CreateRecurringTask
         }
 
+    //TODO register "dtoToUnvalidatedTask" from Domain.Implementation
+    // and in controller create POST function and use these workflows there
+
 /// Implementations of interfaces to be provided to IOC
 module ServicesImplementation =
     open PrepareServices

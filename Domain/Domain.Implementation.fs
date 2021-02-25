@@ -1,7 +1,11 @@
 ﻿module Domain.Implementation
 open Rop
 open Domain.PublicTypes
+open Dto
 
+let dtoToUnvalidatedTask : DtoToUnvalidatedTask =
+    fun dto ->
+        dto |> UnvalidatedTaskDTO.toUnvalidatedTask
 
 let createRecurringTask 
         createTaskFromPrimitive // dependency

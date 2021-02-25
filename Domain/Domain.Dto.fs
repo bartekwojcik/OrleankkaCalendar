@@ -3,6 +3,7 @@ open Rop
 open System
 open Domain.Types
 open ResultComputationExpression
+open AsyncResult
 
 type DtoConvertionError =
     | RepeatFormatValueUnknown of int
@@ -22,12 +23,17 @@ type UnvalidatedTaskDTO() =
 
 /// Functions for converting between the DTO and corresponding domain object
 module UnvalidatedTaskDTO =
+
+    let doAsync f = async {
+            return f
+        }
     
     let private intToRepeatFormat typeValue intervalValue =
         match typeValue with
         | 0 -> succeed (Some (RepeatFormat.OnEveryNDays intervalValue))
         | 1 -> succeed (Some (RepeatFormat.OnEveryNWeeks intervalValue))
         | _ -> succeed None
+        
 
     let arrayToOption (subtasks:ResizeArray<'T>) =
         match subtasks with 
@@ -39,24 +45,34 @@ module UnvalidatedTaskDTO =
         if nullable.HasValue then
             succeed nullable.Value
         else fail error
-    
-    let toUnvalidatedTask (taskDto:UnvalidatedTaskDTO) =
-        result {
-            let! repeatFormat = intToRepeatFormat taskDto.RepeatFormatType taskDto.RepeatFormatInterval
-            let! startTime = valueOrFail taskDto.StartTime StartTimeIsNull
-            let! duration = valueOrFail taskDto.Duration StartTimeIsNull
-            let subtasks = arrayToOption taskDto.Subtasks
-        
-            let result : UnvalidatedRecurringTask = {
-                Id = taskDto.Id
-                TaskTitle = taskDto.TaskTitle
-                StartTime = startTime
-                Duration = duration
-                Description = taskDto.Description
-                Category = taskDto.Category
-                Subtasks = subtasks
-                RepeatFormat = repeatFormat
-                }
 
-            return result
+
+    
+    let toUnvalidatedTask (taskDto:UnvalidatedTaskDTO): AsyncResult<UnvalidatedRecurringTask,DtoConvertionError> =
+        async {
+            let! repeatFormatR = intToRepeatFormat taskDto.RepeatFormatType taskDto.RepeatFormatInterval |> doAsync
+            let! startTimeR = valueOrFail taskDto.StartTime StartTimeIsNull |> doAsync
+            let! durationR = valueOrFail taskDto.Duration StartTimeIsNull |> doAsync
+            let! subtasks = arrayToOption taskDto.Subtasks |> doAsync
+
+            let resultFun = result {
+                let! rf = repeatFormatR
+                let! st = startTimeR
+                let! d = durationR
+
+                let task : UnvalidatedRecurringTask = {
+                    Id = taskDto.Id
+                    TaskTitle = taskDto.TaskTitle
+                    StartTime = st
+                    Duration = d
+                    Description = taskDto.Description
+                    Category = taskDto.Category
+                    Subtasks = subtasks
+                    RepeatFormat = rf
+                    }
+                return task
+                }
+        
+
+            return resultFun
         }
