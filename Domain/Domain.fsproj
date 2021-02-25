@@ -11,6 +11,7 @@
     <Compile Include="Builders.fs" />
     <Compile Include="Domain.SimpleTypes.fs" />
     <Compile Include="Domain.CompoundTypes.fs" />
+    <Compile Include="Domain.Dto.fs" />
     <Compile Include="Domain.PublicTypes.fs" />
     <Compile Include="Domain.Implementation.fs" />
   </ItemGroup>

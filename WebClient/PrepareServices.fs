@@ -2,7 +2,25 @@
 
 open System.Threading.Tasks
 open FSharp.Control.Tasks
+open Domain.Types
+open Domain.PublicTypes
+open Domain.Implementation
 
+/// Service's type-safe interface to be provided to IOC
+module PrepareServices =
+    
+    type CreateTaskWorkflow = {
+        CreateRecurringTask : CreateRecurringTask
+        }
+
+/// Implementations of interfaces to be provided to IOC
+module ServicesImplementation =
+    open PrepareServices
+
+    let createTaskWorkflowFactory () =
+        let createFromPrimitives = RecurringTask.crateFromPrimitive //providing dependency
+        let workflow = createRecurringTask createFromPrimitives
+        { CreateTaskWorkflow.CreateRecurringTask = workflow}
 
 
 
