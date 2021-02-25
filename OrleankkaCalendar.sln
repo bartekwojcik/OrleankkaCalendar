@@ -13,7 +13,9 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Domain", "Domain\Domain.fsp
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Server", "Server\Server.fsproj", "{5C7B1D50-437D-4B02-A4E8-368F3C33AD90}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tests", "Tests\Tests.fsproj", "{4D5C7565-A55A-4986-8A39-4CEAF00D22E9}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Tests", "Tests\Tests.fsproj", "{4D5C7565-A55A-4986-8A39-4CEAF00D22E9}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebClient", "WebClient\WebClient.fsproj", "{F95E091F-C3DA-448D-81E8-5189AB94F1ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{4D5C7565-A55A-4986-8A39-4CEAF00D22E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D5C7565-A55A-4986-8A39-4CEAF00D22E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D5C7565-A55A-4986-8A39-4CEAF00D22E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F95E091F-C3DA-448D-81E8-5189AB94F1ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F95E091F-C3DA-448D-81E8-5189AB94F1ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F95E091F-C3DA-448D-81E8-5189AB94F1ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F95E091F-C3DA-448D-81E8-5189AB94F1ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

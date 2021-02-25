@@ -48,11 +48,11 @@ module DomainTests =
     [<Fact>]
     let ``Create RecurringTask from primitives with incorrect values - should fail `` () =
 
-        let rid = -1
-        let title = ""
+        let rid = -1 //negative id
+        let title = "" // missing title
         let startTime = DateTimeOffset (DateTime.UtcNow)
         let duration = TimeSpan.FromHours 1.0
-        let category = ""
+        let category = "" //missing category
         let description = "description"
         let subtasks :string list option = None
         let rf:RepeatFormat option = None

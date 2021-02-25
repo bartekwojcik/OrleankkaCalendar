@@ -23,6 +23,17 @@ type RecurringTask = {
     RepeatFormat : RepeatFormat option
     }
 
+type UnvalidatedRecurringTask = {
+    Id : int
+    TaskTitle : string
+    StartTime : DateTimeOffset
+    Duration : TimeSpan
+    Category : string
+    Description : string
+    Subtasks : string list option
+    RepeatFormat : RepeatFormat option
+    }
+
 
 
 module RecurringTask =
@@ -34,10 +45,10 @@ module RecurringTask =
         | StringError.Missing field -> InvalidParameters $"Field: {field}. Is missing"
         | StringError.MustNotBeLongerThan (field, length)-> InvalidParameters $"Field: {field} can't be longer than {length} paramters"
     
-    let create taskId title startTime duration category description subtasks repeatFormat =
+    let create (taskId:RecurringTaskId.T) title startTime duration category description subtasks repeatFormat =
 
         let value ={
-                Id = taskId
+                RecurringTask.Id = taskId //explicit RecurringTask.Id to stop type inference from inferring wrong type
                 TaskTitle = title
                 StartTime = startTime
                 Duration = duration
@@ -49,12 +60,11 @@ module RecurringTask =
         succeed value
 
 
-    let crateFromPrimitive taskId title startTime duration category description (subtasks:string list option) (repeatFormat:RepeatFormat option) =
+    let crateFromPrimitive taskId title startTime
+                            duration category description 
+                            (subtasks:string list option) 
+                            (repeatFormat:RepeatFormat option) =
         result {
-
-            //TODO instead of this builder just use regular function (no result {} workflow) and collect all 
-            // let (NO BANG) id = RecurringTaskId.create taskId |> mapMessagesR mapIntErrors
-            // then pass them somewhere to some function ?? (like some binder) eaither combines all the failures or pass it to the create function? sounds wild
 
             let strintToSubTask = (Subtask.create >> (mapMessagesR mapStringErrors)) 
             let sListToSubtaskList value =  List.map strintToSubTask value

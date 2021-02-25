@@ -7,9 +7,13 @@
   <ItemGroup>
     <Compile Include="Rop.fs" />
     <Compile Include="RopHelpers.fs" />
+    <Compile Include="AsyncResult.fs" />
     <Compile Include="Builders.fs" />
     <Compile Include="Domain.SimpleTypes.fs" />
     <Compile Include="Domain.CompoundTypes.fs" />
+    <Compile Include="Domain.PublicTypes.fs" />
+    <Compile Include="Domain.Implementation.fs" />
   </ItemGroup>
+
 
 </Project>
