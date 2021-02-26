@@ -11,4 +11,7 @@ type CreateRecurringTask =
     UnvalidatedRecurringTask -> AsyncResult<RecurringTask,RecurringTaskErrors>
 
 
+type FullTaskWorkflow =
+   UnvalidatedTaskDTO -> AsyncResult<RecurringTask,RecurringTaskErrors>
+
 

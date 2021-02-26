@@ -1,20 +1,21 @@
-﻿module PrepareServices
+﻿namespace WebClient
 
 open System.Threading.Tasks
 open FSharp.Control.Tasks
 open Domain.Types
 open Domain.PublicTypes
 open Domain.Implementation
+open Domain.Dto
 
 /// Service's type-safe interface to be provided to IOC
 module PrepareServices =
     
     type CreateTaskWorkflow = {
+        DtoToUnvalidatedTask : DtoToUnvalidatedTask
         CreateRecurringTask : CreateRecurringTask
         }
+    
 
-    //TODO register "dtoToUnvalidatedTask" from Domain.Implementation
-    // and in controller create POST function and use these workflows there
 
 /// Implementations of interfaces to be provided to IOC
 module ServicesImplementation =
@@ -22,8 +23,14 @@ module ServicesImplementation =
 
     let createTaskWorkflowFactory () =
         let createFromPrimitives = RecurringTask.crateFromPrimitive //providing dependency
-        let workflow = createRecurringTask createFromPrimitives
-        { CreateTaskWorkflow.CreateRecurringTask = workflow}
+        let taskWorkflow = createRecurringTask createFromPrimitives
+
+        let dtoWorkflow = UnvalidatedTaskDTO.toUnvalidatedTask
+
+        { 
+            CreateTaskWorkflow.CreateRecurringTask = taskWorkflow 
+            DtoToUnvalidatedTask = dtoWorkflow
+        }
 
 
 

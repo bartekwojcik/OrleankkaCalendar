@@ -2,6 +2,8 @@
 open Rop
 open Domain.PublicTypes
 open Dto
+open AsyncResult
+open ResultComputationExpression
 
 let dtoToUnvalidatedTask : DtoToUnvalidatedTask =
     fun dto ->
@@ -23,3 +25,21 @@ let createRecurringTask
                             unvalidatedTask.RepeatFormat
             return taskR
         }
+
+let errorMap = function
+    | DtoConvertionError.DurationIsNull -> Types.RecurringTaskErrors.InvalidParameters "Duration is null"
+    | DtoConvertionError.RepeatFormatValueUnknown a-> Types.RecurringTaskErrors.InvalidParameters $"RepeatFormatValueUnknown of {a}"
+    | DtoConvertionError.StartTimeIsNull -> Types.RecurringTaskErrors.InvalidParameters "Start time is null"
+
+let fullTaskWorkflow (dtoToUnvalidTask:DtoToUnvalidatedTask)
+                    (unvalidToValidTask:CreateRecurringTask)  
+                    : FullTaskWorkflow =
+    fun dto -> 
+        async {
+            let! unvalidatedTaskR = dtoToUnvalidTask dto
+            let convertedErrorTaskR = unvalidatedTaskR |> Rop.mapMessagesR errorMap
+            let! validatedTaskR = AsyncResult.mapR unvalidToValidTask convertedErrorTaskR            
+
+            return validatedTaskR
+        }
+

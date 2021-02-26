@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Controllers\TaskController.fs" />
     <Compile Include="PrepareServices.fs" />
+    <Compile Include="Controllers/TaskController.fs" />
     <Compile Include="Controllers/WeatherForecastController.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="Program.fs" />

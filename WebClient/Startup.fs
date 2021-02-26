@@ -12,7 +12,8 @@ open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 
-open PrepareServices
+
+open WebClient
 
 
 type Startup private () =
@@ -25,8 +26,10 @@ type Startup private () =
         // Add framework services.
         services.AddControllers() |> ignore
         // test how to nicely inject function without function colisions
-        services.AddSingleton<ServicesTests.GetPerson>(ServicesTests.getGetPerson) |> ignore
-        services.AddSingleton<ServicesTests.DummyWorkflow3>(ServicesTests.getDW3()) |> ignore
+        //services.AddSingleton<ServicesTests.GetPerson>(ServicesTests.getGetPerson) |> ignore
+        //services.AddSingleton<ServicesTests.DummyWorkflow3>(ServicesTests.getDW3()) |> ignore
+        services.AddSingleton<PrepareServices.CreateTaskWorkflow>(ServicesImplementation.createTaskWorkflowFactory()) |> ignore
+
         
         //services.AddSingleton(typeof<IClientActorSystem>,PrepareServices.getActorSystem()) |> ignore
 
