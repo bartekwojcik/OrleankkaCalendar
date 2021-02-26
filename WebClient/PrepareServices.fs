@@ -13,6 +13,8 @@ module PrepareServices =
     type CreateTaskWorkflow = {
         DtoToUnvalidatedTask : DtoToUnvalidatedTask
         CreateRecurringTask : CreateRecurringTask
+        CreateTaskWorkflow : FullTaskWorkflow
+        RecurringTaskToDto : RecurringTaskToDto
         }
     
 
@@ -26,10 +28,13 @@ module ServicesImplementation =
         let taskWorkflow = createRecurringTask createFromPrimitives
 
         let dtoWorkflow = UnvalidatedTaskDTO.toUnvalidatedTask
+        let workflow = fullTaskWorkflow dtoToUnvalidatedTask taskWorkflow
 
         { 
             CreateTaskWorkflow.CreateRecurringTask = taskWorkflow 
             DtoToUnvalidatedTask = dtoWorkflow
+            CreateTaskWorkflow = workflow
+            RecurringTaskToDto = TaskDTO.recurringTaskToDto
         }
 
 

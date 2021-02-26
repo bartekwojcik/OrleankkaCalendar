@@ -5,7 +5,7 @@ open Microsoft.AspNetCore.Mvc
 open Microsoft.Extensions.Logging
 open FSharp.Control.Tasks.V2
 
-open PrepareServices.ServicesTests
+open WebClient.ServicesTests
 
 type WeatherForecast =
     { Date: DateTime
