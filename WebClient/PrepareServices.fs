@@ -16,6 +16,10 @@ module PrepareServices =
         CreateTaskWorkflow : FullTaskWorkflow
         RecurringTaskToDto : RecurringTaskToDto
         }
+
+    type FullTaskWorkflowWithNoFluff = {
+        FullTaskWorkflowWithTaskDto : FullTaskWorkflowWithTaskDto
+    }
     
 
 
@@ -37,6 +41,17 @@ module ServicesImplementation =
             RecurringTaskToDto = TaskDTO.recurringTaskToDto
         }
 
+
+    let fullTaskWorkflowWithNoFluffFactory () =
+        let createFromPrimitives = RecurringTask.crateFromPrimitive //providing dependency
+        let taskWorkflow = createRecurringTask createFromPrimitives
+        let workflow = fullTaskWorkflow dtoToUnvalidatedTask taskWorkflow
+        
+        let finalF = fullTaskWorkflowWithTaskDto workflow TaskDTO.recurringTaskToDto 
+        
+        {
+            FullTaskWorkflowWithNoFluff.FullTaskWorkflowWithTaskDto = finalF
+        }
 
 
 /// Module where i registered some dummy functions to play with IOC in functional manner

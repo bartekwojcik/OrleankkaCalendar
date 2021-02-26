@@ -29,6 +29,8 @@ type Startup private () =
         //services.AddSingleton<ServicesTests.GetPerson>(ServicesTests.getGetPerson) |> ignore
         //services.AddSingleton<ServicesTests.DummyWorkflow3>(ServicesTests.getDW3()) |> ignore
         services.AddSingleton<PrepareServices.CreateTaskWorkflow>(ServicesImplementation.createTaskWorkflowFactory()) |> ignore
+        services.AddSingleton<PrepareServices.FullTaskWorkflowWithNoFluff>
+                    (ServicesImplementation.fullTaskWorkflowWithNoFluffFactory()) |> ignore
 
         
         //services.AddSingleton(typeof<IClientActorSystem>,PrepareServices.getActorSystem()) |> ignore

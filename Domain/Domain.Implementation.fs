@@ -43,3 +43,18 @@ let fullTaskWorkflow (dtoToUnvalidTask:DtoToUnvalidatedTask)
             return validatedTaskR
         }
 
+let fullTaskWorkflowWithTaskDto (fullTaskWorkflow:FullTaskWorkflow) 
+                                (recurringTaskToDto:RecurringTaskToDto)
+                                : FullTaskWorkflowWithTaskDto =
+    fun unvalidatedTaskDto ->
+        async {
+            let! taskR = fullTaskWorkflow unvalidatedTaskDto
+
+            let tempFun x = succeed (recurringTaskToDto x) 
+            let taskToDtoR x = bindR tempFun x
+
+            let result = taskToDtoR taskR
+            return result
+        }
+        
+
