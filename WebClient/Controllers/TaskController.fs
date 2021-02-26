@@ -71,7 +71,7 @@ type TaskController (logger : ILogger<TaskController>,
         httpResult
 
 
-    //TODO create POST to use GRAIN to do workflow and save to Database
+    //TODO create POST to use GRAIN to do workflow and return some message
 
     //TODO create docker composer with databse image
       
