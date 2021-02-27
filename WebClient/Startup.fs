@@ -25,10 +25,8 @@ type Startup private () =
     member this.ConfigureServices(services: IServiceCollection) =
         // Add framework services.
         services.AddControllers() |> ignore
-        // test how to nicely inject function without function colisions
-        //services.AddSingleton<ServicesTests.GetPerson>(ServicesTests.getGetPerson) |> ignore
-        //services.AddSingleton<ServicesTests.DummyWorkflow3>(ServicesTests.getDW3()) |> ignore
         services.AddSingleton<PrepareServices.CreateTaskWorkflow>(ServicesImplementation.createTaskWorkflowFactory()) |> ignore
+        services.AddSingleton<PrepareServices.GetTaskWithGrain>(ServicesImplementation.getTaskWithGrainFactory()) |> ignore
         services.AddSingleton<PrepareServices.FullTaskWorkflowWithNoFluff>
                     (ServicesImplementation.fullTaskWorkflowWithNoFluffFactory()) |> ignore
 

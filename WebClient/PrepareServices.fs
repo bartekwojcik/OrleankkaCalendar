@@ -6,6 +6,7 @@ open Domain.Types
 open Domain.PublicTypes
 open Domain.Implementation
 open Domain.Dto
+open OrleankkaClient
 
 /// Service's type-safe interface to be provided to IOC
 module PrepareServices =
@@ -20,6 +21,11 @@ module PrepareServices =
     type FullTaskWorkflowWithNoFluff = {
         FullTaskWorkflowWithTaskDto : FullTaskWorkflowWithTaskDto
     }
+
+    type GetTaskWithGrain =
+        {
+         GetTaskWithGrain : TaskFromGrain
+        }
     
 
 
@@ -53,32 +59,38 @@ module ServicesImplementation =
             FullTaskWorkflowWithNoFluff.FullTaskWorkflowWithTaskDto = finalF
         }
 
-
-/// Module where i registered some dummy functions to play with IOC in functional manner
-module ServicesTests =
-    
-    type DummyWorkflow = DummyWorkflow of (unit -> Task<string>)
-    type DummyWorkflow2 = DummyWorkflow2 of (string -> string)
-    type DummyWorkflow3 = {
-        DoSomething : (string -> string)
+    let getTaskWithGrainFactory () =
+        let workflow = OrleankkaClient.getTaskFromGrain
+        {
+            GetTaskWithGrain.GetTaskWithGrain = workflow
         }
 
-    let getDW3 () =
-        let someFuction i s =
-            $"%s{s} dupa %i{i}"
 
-        let partalSomeFunction = someFuction 5
+///// Module where i registered some dummy functions to play with IOC in functional manner
+//module ServicesTests =
+    
+//    type DummyWorkflow = DummyWorkflow of (unit -> Task<string>)
+//    type DummyWorkflow2 = DummyWorkflow2 of (string -> string)
+//    type DummyWorkflow3 = {
+//        DoSomething : (string -> string)
+//        }
 
-        {DoSomething = partalSomeFunction}
+//    let getDW3 () =
+//        let someFuction i s =
+//            $"%s{s} dupa %i{i}"
+
+//        let partalSomeFunction = someFuction 5
+
+//        {DoSomething = partalSomeFunction}
  
-    type GetPerson = string -> int
+//    type GetPerson = string -> int
  
-    let topLevel b (s:string) =
-        if b then
-            s.Length
-        else (s.Length) - 1
+//    let topLevel b (s:string) =
+//        if b then
+//            s.Length
+//        else (s.Length) - 1
  
  
-    let getGetPerson : GetPerson =
-        fun s -> 
-            topLevel true s
+//    let getGetPerson : GetPerson =
+//        fun s -> 
+//            topLevel true s

@@ -4,6 +4,7 @@ open AsyncResult
 open Domain.Types
 open Dto
 open Rop
+open System.Threading.Tasks
 
 type DtoToUnvalidatedTask =
     UnvalidatedTaskDTO ->  AsyncResult<UnvalidatedRecurringTask,DtoConvertionError>
@@ -20,4 +21,4 @@ type FullTaskWorkflow =
 type FullTaskWorkflowWithTaskDto =
     UnvalidatedTaskDTO -> AsyncResult<TaskDTO,RecurringTaskErrors>
 
-
+type TaskFromGrain = UnvalidatedTaskDTO ->  Task<RopResult<RecurringTask,RecurringTaskErrors>>

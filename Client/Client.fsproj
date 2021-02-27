@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Contract\Contract.fsproj" />
+    <ProjectReference Include="..\Domain\Domain.fsproj" />
   </ItemGroup>
 
 </Project>

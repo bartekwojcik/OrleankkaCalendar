@@ -6,11 +6,16 @@
 
   <ItemGroup>
     <Compile Include="Bugger.fs" />
+    <Compile Include="TaskGrain.fs" />
     <Compile Include="TestLibrary.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Orleankka.Fsharp" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.fsproj" />
   </ItemGroup>
 
 </Project>

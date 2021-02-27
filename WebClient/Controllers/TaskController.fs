@@ -12,6 +12,7 @@ open Rop
 [<Route("[controller]")>]
 type TaskController (logger : ILogger<TaskController>,
                      dep : CreateTaskWorkflow,
+                     grainDep : GetTaskWithGrain,
                      worflowDep :FullTaskWorkflowWithNoFluff) =
     inherit ControllerBase()
 
@@ -24,7 +25,7 @@ type TaskController (logger : ILogger<TaskController>,
     
     ///Example get instead of post so you dont have to send request to get the same response
     [<HttpGet>]
-    [<Route("getSimpleTask")>]
+    [<Route("getTask1")>]
     member __.Get() : IActionResult =
         let workflow = dep.CreateTaskWorkflow
         let taskToDtoFun task = succeed (dep.RecurringTaskToDto task)
@@ -50,8 +51,9 @@ type TaskController (logger : ILogger<TaskController>,
         httpResult
 
     [<HttpGet>]
-    [<Route("getTask")>]
-    member __.GetJustWorkflow() : IActionResult =
+    [<Route("getTask2")>]
+    ///Same as "getTask1" but with full workflow encapsulated in dependency
+    member __.GetTask2() : IActionResult =
         //some random DTO that would come normally in POST request
         let dto = UnvalidatedTaskDTO()
         dto.Id <- 1
@@ -70,8 +72,33 @@ type TaskController (logger : ILogger<TaskController>,
                         |> toResponse
         httpResult
 
+    [<HttpGet>]
+    [<Route("getTask3")>]
+    ///Same as "getTask1" but with asking Orleans/Orleankka to perform action
+    member __.GetTask3() : IActionResult =
+        
+        let taskToDtoFun task = succeed (dep.RecurringTaskToDto task)
+        let taskToDto task = bindR taskToDtoFun task
 
-    //TODO create POST to use GRAIN to do workflow and return some message
+        //some random DTO that would come normally in POST request
+        let dto = UnvalidatedTaskDTO()
+        dto.Id <- 1
+        dto.TaskTitle <- "Title"
+        dto.StartTime <- DateTimeOffset.UtcNow
+        dto.Duration <- TimeSpan.FromHours(1.0)
+        dto.Category <-"category"
+        dto.Description <- "description"
+        dto.Subtasks <- ["asd" ; "aaaa" ] |> ResizeArray<string>
+        dto.RepeatFormatInterval <- 7
+        dto.RepeatFormatType <- 0   
+
+
+        let taskR = grainDep.GetTaskWithGrain dto |> Async.AwaitTask |> Async.RunSynchronously       
+        let result = taskR |>  taskToDto |> toResponse 
+
+        result
+
+
 
     //TODO create docker composer with databse image
       

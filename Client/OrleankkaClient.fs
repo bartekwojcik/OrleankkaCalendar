@@ -2,18 +2,22 @@
 
 module OrleankkaClient
 
-
+open Rop
 open Microsoft.Extensions.Logging
 open Orleans
 open Orleans.Configuration
 open System
 open System.Reflection
 open FSharp.Control.Tasks.V2
+open Contracts.TaskGrain
 open Contracts.Say
 open Orleans.Hosting
 open Orleankka
 open Orleankka.Client
 open Orleankka.FSharp
+open Domain.Dto
+open System.Threading.Tasks
+open Domain.PublicTypes
 
 let doClientWork (system:IActorSystem) = task {
   let greeter = ActorSystem.typedActorOf<IHello, HelloMessages>(system,"greeter")
@@ -26,20 +30,18 @@ let doClientWork (system:IActorSystem) = task {
 
 }
 
-let doClientWork2 (system:IActorSystem) = task {
-    let greeter = ActorSystem.typedActorOf<IHello, HelloMessages>(system,"greeter")
+let createTaskJob(system:IActorSystem) (taskDto:UnvalidatedTaskDTO) = task {
+  let grainId = $"{taskDto.Id}"
+  let grain = ActorSystem.typedActorOf<ITaskCreate, TaskMessage>(system,grainId) //this id might be null
 
-    let! hi = greeter <? Hi
-    let! hello = greeter <? Hello "Roman"
-    do! greeter <! Bue
-    //do! greeter.Tell Bue
-    return  $"hi: %s{hi} \nhello: %s{hello}"
-    }
+  let! taskR = grain <? CreateTask taskDto
+  return taskR
+  }
 
 
 let runClient () = task {
-    use codeGenLoggerFactory = new LoggerFactory();
-    use client =
+    let codeGenLoggerFactory = new LoggerFactory();
+    let client =
         ClientBuilder()
             .UseLocalhostClustering()
             .Configure(fun (x:ClusterOptions) -> x.ClusterId <- "dev";x.ServiceId <- "OrleansBasic" )
@@ -55,6 +57,13 @@ let runClient () = task {
     return client
 }
 
+let getTaskFromGrain : TaskFromGrain=
+        fun dto -> task {
+        let! client = runClient()
+        let actorSystem = client.ActorSystem()
+        let! taskR = createTaskJob actorSystem dto
+        return taskR
+    }
 
 [<EntryPoint>]
 let main argv =
