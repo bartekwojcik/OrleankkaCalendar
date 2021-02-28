@@ -39,12 +39,13 @@ type UnvalidatedRecurringTask = {
 module RecurringTask =
 
     let private mapIntErrors = function
-        | MustBePositiveInteger field -> InvalidParameters $"Field: {field}. Intiger must be positive"
+        | MustBePositiveInteger field -> InvalidParameters $"Field: {field}. Integer must be positive"
 
     let private mapStringErrors = function 
         | StringError.Missing field -> InvalidParameters $"Field: {field}. Is missing"
-        | StringError.MustNotBeLongerThan (field, length)-> InvalidParameters $"Field: {field} can't be longer than {length} paramters"
+        | StringError.MustNotBeLongerThan (field, length)-> InvalidParameters $"Field: {field} can't be longer than {length} parameters"
     
+    ///Create RecurringTask using already validated components
     let create (taskId:RecurringTaskId.T) title startTime duration category description subtasks repeatFormat =
 
         let value ={
@@ -59,7 +60,7 @@ module RecurringTask =
                 } 
         succeed value
 
-
+    ///Validate primitive components and try return RecurringTask
     let crateFromPrimitive taskId title startTime
                             duration category description 
                             (subtasks:string list option) 
@@ -79,7 +80,7 @@ module RecurringTask =
             and! subtOption = someOrNone sListToSubtaskList subtasks |> RopResultHelpers.fromOptionToSuccess 
             let! value = create id tt st dur cat desc subtOption repeatFormat
 
-            return value//create id tt st dur cat desc subtOption repeatFormat
+            return value
         }
 
 

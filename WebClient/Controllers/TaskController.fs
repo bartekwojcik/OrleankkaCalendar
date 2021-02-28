@@ -23,7 +23,7 @@ type TaskController (logger : ILogger<TaskController>,
         | Failure (msgs) -> BadRequestObjectResult msgs :> IActionResult
         
     
-    ///Example get instead of post so you dont have to send request to get the same response
+    ///Example GET instead of POST so you don't have to create request in Postman to get the same response
     [<HttpGet>]
     [<Route("getTask1")>]
     member __.Get() : IActionResult =

@@ -15,6 +15,8 @@ open Rop
 open AsyncResult
 
 module TaskGain =
+    ///Creates new RecurringTask using bleeding edge, rocket science Orleans messaging
+    ///Extremely advanced logging technology
     type CreateTaskGrain (loggerFactory:ILoggerFactory) =
         inherit ActorGrain()
         let log = loggerFactory.CreateLogger(typeof<CreateTaskGrain>)
@@ -28,7 +30,7 @@ module TaskGain =
 
         let logFailure dtoId msgs =
             log.LogInformation 
-                (sprintf "client asked to create task of Id \"%i\" but dto was corrupted. Reasons: %O " dtoId msgs)
+                (sprintf "client asked to create task of Id \"%i\" but DTO was corrupted. Reasons: %O " dtoId msgs)
 
 
         let workflow =

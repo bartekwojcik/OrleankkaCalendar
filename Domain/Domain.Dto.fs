@@ -10,6 +10,7 @@ type DtoConvertionError =
     | StartTimeIsNull
     | DurationIsNull
 
+///Dto of UnvalidatedRecurringTask
 [<AllowNullLiteralAttribute>]
 type UnvalidatedTaskDTO() = 
     member val Id = 0 with get, set
@@ -58,8 +59,7 @@ module UnvalidatedTaskDTO =
             succeed nullable.Value
         else fail error
 
-
-    
+    /// check if dto is not corrupted enough to create UnvalidatedRecurringTask 
     let toUnvalidatedTask (taskDto:UnvalidatedTaskDTO): AsyncResult<UnvalidatedRecurringTask,DtoConvertionError> =
         async {
 
@@ -90,7 +90,7 @@ module UnvalidatedTaskDTO =
             return resultFun
         }
 
-
+///DTO for (validated) RecurringTask
 type TaskDTO() =
     member val Id = 0 with get, set
     member val TaskTitle : string = null with get, set 
@@ -107,6 +107,7 @@ type TaskDTO() =
     member val RepeatFormatInterval = 0 with get, set
 
 module TaskDTO =
+
     let recurringTaskToDto (task:RecurringTask) : TaskDTO =
         let dto = TaskDTO()
 

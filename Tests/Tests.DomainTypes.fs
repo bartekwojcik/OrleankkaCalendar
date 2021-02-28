@@ -86,7 +86,7 @@ module DomainTests =
                                             (fun (a:string) -> a.ToLower().Contains("title"))
                                             msgsStrings
 
-            Assert.Equal(3, msgs.Length) //3 invalid paramters errors
+            Assert.Equal(3, msgs.Length) //3 invalid parameters errors
             Assert.Equal(1, nOfErrorsWithReccuinrId)
             Assert.Equal(1, nOfErrorsWithCategory)
             Assert.Equal(1, nOfErrorsWithTitle)
@@ -112,7 +112,7 @@ module DomainTests =
         | Success (task,msgs) -> Assert.Equal(dto.Id,task.Id)
                                  Assert.True(task.Subtasks.IsSome)
                                  Assert.Equal(2,task.Subtasks.Value.Length)
-        | Failure _ -> Assert.True(false, "UnvalidatedTask should be created when all paramters of DTO are provided")
+        | Failure _ -> Assert.True(false, "UnvalidatedTask should be created when all parameters of DTO are provided")
 
     [<Fact>]
     let ``Create unvalidated task DTO object and convert to UnvalidatedTask - should fail`` () =
@@ -126,12 +126,12 @@ module DomainTests =
         dto.Description <- "description"
         dto.Subtasks <- ["asd" ; "aaaa" ] |> ResizeArray<string>
         dto.RepeatFormatInterval <- -1 //negative number
-        dto.RepeatFormatType <- -9999 //random numeber 
+        dto.RepeatFormatType <- -9999 //random number 
 
         let unvalidTaskR = UnvalidatedTaskDTO.toUnvalidatedTask dto |> Async.RunSynchronously
 
         match unvalidTaskR with
-        | Success (task,msgs) -> Assert.True(false, "UnvalidatedTask should not be created when DTO paramters are missing")
+        | Success (task,msgs) -> Assert.True(false, "UnvalidatedTask should not be created when DTO parameters are missing")
         | Failure (msgs) ->  Assert.Equal(3, msgs.Length)
 
     [<Fact>]
@@ -159,7 +159,7 @@ module DomainTests =
 
         match recurringTaskR with
         | Success (task, msgs) -> Assert.Equal(Title.value task.TaskTitle,titleString)
-        | Failure (msgs) -> Assert.False(true, "Worflow should always succeed given correct DTO")
+        | Failure (msgs) -> Assert.False(true, "Workflow should always succeed given correct DTO")
 
 
     [<Fact>]
@@ -184,7 +184,7 @@ module DomainTests =
         let recurringTaskR = workflow dto |> Async.RunSynchronously
 
         match recurringTaskR with
-        | Success (task, msgs) -> Assert.True(true, "Worflow should always fail given corruputed DTO")
+        | Success (task, msgs) -> Assert.True(true, "Workflow should always fail given corrupted DTO")
         | Failure (msgs) -> Assert.Equal(3,msgs.Length)
                             let startTimeIsNullErrorOption = List.tryFind (fun e -> 
                                                                                 match e with 
@@ -218,9 +218,9 @@ module DomainTests =
         let recurringTaskR = workflow dto |> Async.RunSynchronously
 
         match recurringTaskR with
-        | Success (task, msgs) -> Assert.True(true, "Worflow should always fail given corruputed DTO")
+        | Success (task, msgs) -> Assert.True(true, "Worflow should always fail given corrupted DTO")
         | Failure (msgs) -> Assert.Equal(4,msgs.Length)
-                            let stringToFind = "Field: RecurringTaskId. Intiger must be positive"
+                            let stringToFind = "Field: RecurringTaskId. Integer must be positive"
                             let startTimeIsNullErrorOption = List.tryFind (fun e -> 
                                                                                 match e with 
                                                                                 | InvalidParameters m when String.Equals(m,stringToFind,StringComparison.InvariantCultureIgnoreCase) -> true

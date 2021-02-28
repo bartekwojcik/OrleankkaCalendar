@@ -5,8 +5,8 @@ open Orleans
 open Orleans.Configuration
 open Orleans.Hosting
 open Orleankka.Cluster
-open Contracts.Say
-open Grains.Say
+open Contracts.TaskGrain
+open Grains.TaskGain
 
 
 let getSilo () = task {
@@ -17,8 +17,8 @@ let getSilo () = task {
       .Configure(fun (x:ClusterOptions) -> x.ClusterId <- "dev" 
                                            x.ServiceId <- "OrleansBasic")
       .ConfigureApplicationParts(fun parts -> 
-        parts.AddApplicationPart(typeof<IHello>.Assembly).WithCodeGeneration(codeGenLoggerFactory)
-             .AddApplicationPart(typeof<HelloGrain>.Assembly).WithCodeGeneration(codeGenLoggerFactory) |> ignore)
+        parts.AddApplicationPart(typeof<ITaskCreate>.Assembly).WithCodeGeneration(codeGenLoggerFactory)
+             .AddApplicationPart(typeof<CreateTaskGrain>.Assembly).WithCodeGeneration(codeGenLoggerFactory) |> ignore)
       .ConfigureLogging(fun (logging:ILoggingBuilder) -> logging.AddConsole() |> ignore)
       .UseOrleankka()
       .Build()
@@ -40,4 +40,4 @@ let main argv =
     runMainAsync ()
     |> Async.AwaitTask
     |> Async.RunSynchronously
-    0 // retu
+    0 

@@ -1,8 +1,8 @@
-﻿//namespace RopHelpers
-//open Rop
-// /// combine a list of results, monadically
+﻿
 module RopResultHelpers
 open Rop
+
+/// combine a list of results, monadically
 let sequence aListOfResults =
 
     let cons head tail = head :: tail
@@ -11,6 +11,7 @@ let sequence aListOfResults =
 
     List.foldBack consR aListOfResults initialValue
 
+///From option of results to results of options
 let fromOptionToSuccess (resulROption:RopResult<'T,'E> option) : RopResult<'T option,'E> =
     match resulROption with
     | None -> succeed None

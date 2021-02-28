@@ -18,22 +18,16 @@ module Async =
 [<RequireQualifiedAccess>]
 module AsyncResult =
     
+    /// adapter for RopResult and a async function
     let mapR (f:'a -> AsyncResult<'b,_>) (ropR:RopResult<'a,_>) =
         async {
-
             match ropR with        
             | Success (x, msgs) -> let! res = f x
                                    return res
-            | Failure (msgs) -> return Failure (msgs)
-            
+            | Failure (msgs) -> return Failure (msgs)         
         }
-    
+    /// bind x to async function f
     let bindA f x = async {
         let! result = f x
         return result
         }
-
-
-    /////Lift a function to AsyncResult
-    //let map f (x:AsyncResult<_,_>) : AsyncResult<_,_> =
-    //    Async.map(mapR f) x

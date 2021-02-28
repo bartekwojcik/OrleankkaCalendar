@@ -6,9 +6,9 @@ open System.Net
 open Rop
 open Domain.Dto
 
-
+///Again, this task refers to Domain type "RecurringTask" - i could have done better job in naming
 module TaskGrain =
-
+    
     type TaskMessage =
         | CreateTask of UnvalidatedTaskDTO
 

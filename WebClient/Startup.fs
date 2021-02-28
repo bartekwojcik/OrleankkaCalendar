@@ -25,13 +25,12 @@ type Startup private () =
     member this.ConfigureServices(services: IServiceCollection) =
         // Add framework services.
         services.AddControllers() |> ignore
+       
         services.AddSingleton<PrepareServices.CreateTaskWorkflow>(ServicesImplementation.createTaskWorkflowFactory()) |> ignore
         services.AddSingleton<PrepareServices.GetTaskWithGrain>(ServicesImplementation.getTaskWithGrainFactory()) |> ignore
         services.AddSingleton<PrepareServices.FullTaskWorkflowWithNoFluff>
                     (ServicesImplementation.fullTaskWorkflowWithNoFluffFactory()) |> ignore
 
-        
-        //services.AddSingleton(typeof<IClientActorSystem>,PrepareServices.getActorSystem()) |> ignore
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     member this.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =

@@ -10,7 +10,7 @@ open System
 open System.Reflection
 open FSharp.Control.Tasks.V2
 open Contracts.TaskGrain
-open Contracts.Say
+
 open Orleans.Hosting
 open Orleankka
 open Orleankka.Client
@@ -19,17 +19,9 @@ open Domain.Dto
 open System.Threading.Tasks
 open Domain.PublicTypes
 
-let doClientWork (system:IActorSystem) = task {
-  let greeter = ActorSystem.typedActorOf<IHello, HelloMessages>(system,"greeter")
-
-  let! hi = greeter <? Hi
-  let! hello = greeter <? Hello "Roman"
-  do! greeter <! Bue
-  //do! greeter.Tell Bue
-  do printfn "hi: %s \nhello: %s" hi hello
-
-}
-
+///Example of calling grain logic.
+///Unfortunate overlap in naming my domain type "RecurringTask" (just like google calendar's 'task') and System.Threading.Tasks.Task 
+///makes function's name less readable.
 let createTaskJob(system:IActorSystem) (taskDto:UnvalidatedTaskDTO) = task {
   let grainId = $"{taskDto.Id}"
   let grain = ActorSystem.typedActorOf<ITaskCreate, TaskMessage>(system,grainId) //this id might be null
@@ -38,7 +30,7 @@ let createTaskJob(system:IActorSystem) (taskDto:UnvalidatedTaskDTO) = task {
   return taskR
   }
 
-
+/// Create and connect client to silo.
 let runClient () = task {
     let codeGenLoggerFactory = new LoggerFactory();
     let client =
@@ -47,16 +39,15 @@ let runClient () = task {
             .Configure(fun (x:ClusterOptions) -> x.ClusterId <- "dev";x.ServiceId <- "OrleansBasic" )
             .ConfigureLogging(fun (logging:ILoggingBuilder) -> logging.AddConsole() |> ignore)
             .ConfigureApplicationParts(fun parts -> 
-            parts.AddApplicationPart(typeof<IHello>.Assembly).WithCodeGeneration(codeGenLoggerFactory) |> ignore)
+            parts.AddApplicationPart(typeof<ITaskCreate>.Assembly).WithCodeGeneration(codeGenLoggerFactory) |> ignore)
             .UseOrleankka()
             .Build()
     do! client.Connect()
     Console.WriteLine("Client successfully connected to silo host \n");
-    do! doClientWork (client.ActorSystem())
-    //do Console.ReadKey() |> ignore
     return client
 }
 
+///contract Interface-like function to be used in WebClient
 let getTaskFromGrain : TaskFromGrain=
         fun dto -> task {
         let! client = runClient()
@@ -65,10 +56,3 @@ let getTaskFromGrain : TaskFromGrain=
         return taskR
     }
 
-[<EntryPoint>]
-let main argv =
-    // printfn "Hello World from F#!"
-    let orleansClient = runClient ()
-                        |> Async.AwaitTask
-                        |> Async.RunSynchronously
-    0 // return an integer exit code

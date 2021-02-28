@@ -7,7 +7,6 @@
   <ItemGroup>
     <Compile Include="Bugger.fs" />
     <Compile Include="TaskGrain.fs" />
-    <Compile Include="TestLibrary.fs" />
   </ItemGroup>
 
   <ItemGroup>

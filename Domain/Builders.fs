@@ -10,8 +10,8 @@
         member __.Delay(f) = f
         member __.Run(f) = f()
 
+        ///To be able to use "and!" keyword
         member _.BindReturn(x, f) = mapR f x
-
         member _.MergeSources(result1, result2) =
             match result1, result2 with
             | Success (ok1,msgs1), Success (ok2,msgs2) ->
