@@ -11,7 +11,7 @@ The motivation behind this project was to learn F# language using [Railway Orien
 - **Server** - Orleans server
 - **WebClient** - Asp .Net Core front application that invokes domain logic.
 
-### How to run
+### How to run this project
 Step 1: Run **Server**
 
 Step 2: Run **WebClient**. It will automatically start `localhost:44346/task/getTask1` which runs domain logic. Go to `localhost:44346/task/getTask3` to get exactly the same response, but this time using an Actor model with Orleans/Orleankka. 
