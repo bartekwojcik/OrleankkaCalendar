@@ -21,7 +21,7 @@ In any case, the response should look something like that:
 
 Obviously, because I'm a busy man I will never finish this project. Moreover, is the Actor model really of any use for calendar application? Highly doubtful.
 
-[]:
+
 
    [Railway Oriented Programming]: <https://fsharpforfunandprofit.com/rop/>
    [Orleans]: <https://github.com/dotnet/orleans>
