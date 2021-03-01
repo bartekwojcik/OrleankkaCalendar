@@ -3,7 +3,7 @@
 The motivation behind this project was to learn F# language using [Railway Oriented Programming] paradigm combined with [Orleans] and its functional API [Orleankka], which is similar to similar to Akka.
 
 ### Solution includes:
-- **Domain** - Domain logic for something that potentially could have been something resembling Google Calendar: set up a task, repeat pattern, etc. Currently it only performs validation and creation of new Task (not to be confused with System.Threading.Tasks.Task). Interfaces are to be found in Domain.PublicTypes.fs file.
+- **Domain** - Domain logic for something that potentially could have been something resembling Google Calendar: set up a task, repeat pattern, subtasks and so on. Currently it only performs validation and creation of new Task (not to be confused with System.Threading.Tasks.Task). Interfaces are to be found in Domain.PublicTypes.fs file.
 - **Tests** - Tests for domain logic. 
 - **Client** - Orleans client 
 - **Contract** - Interfaces for Orleans grains
